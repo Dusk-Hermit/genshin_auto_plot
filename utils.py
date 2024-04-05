@@ -22,7 +22,7 @@ MoniterDev = win32api.EnumDisplayMonitors(None, None)
 SCREEN_WIDTH = MoniterDev[0][2][2]
 SCREEN_HEIGHT = MoniterDev[0][2][3]
 
-THRESHOLD=0.9
+THRESHOLD=0.85
 CLICK_POINT=(1817, 1069)
 X1,X2,Y1,Y2=80,110,45,80
 
