@@ -7,8 +7,28 @@ import random
 import ctypes
 import sys
 
-img1=Image.open('auto_png1.png')
-img2=Image.open('auto_png2.png')
+MoniterDev = win32api.EnumDisplayMonitors(None, None)
+SCREEN_WIDTH = MoniterDev[0][2][2]
+SCREEN_HEIGHT = MoniterDev[0][2][3]
+print(f'SCREEN_WIDTH:{SCREEN_WIDTH},SCREEN_HEIGHT:{SCREEN_HEIGHT}')
+
+img1=img2=None
+
+THRESHOLD=0.85
+
+if SCREEN_WIDTH==1920 and SCREEN_HEIGHT==1080:
+    CLICK_POINT=(1416, 725)
+    X1,X2,Y1,Y2=60,85,35,60
+    img1=Image.open('auto_png1_1080.png')
+    img2=Image.open('auto_png2_1080.png')
+elif SCREEN_WIDTH==2560 and SCREEN_HEIGHT==1440:
+    CLICK_POINT=(1817, 1069)
+    X1,X2,Y1,Y2=80,110,45,80
+    img1=Image.open('auto_png1.png')
+    img2=Image.open('auto_png2.png')
+else:
+    print(f'未知分辨率，退出程序')
+    sys.exit(0)
 
 print(f'img1.size:{img1.size}')
 print(f'img2.size:{img2.size}')
@@ -17,14 +37,6 @@ assert img1.size==img2.size
 
 img1_cv=cv2.cvtColor(np.array(img1), cv2.COLOR_RGB2BGR)
 img2_cv=cv2.cvtColor(np.array(img2), cv2.COLOR_RGB2BGR)
-
-MoniterDev = win32api.EnumDisplayMonitors(None, None)
-SCREEN_WIDTH = MoniterDev[0][2][2]
-SCREEN_HEIGHT = MoniterDev[0][2][3]
-
-THRESHOLD=0.85
-CLICK_POINT=(1817, 1069)
-X1,X2,Y1,Y2=80,110,45,80
 
 def window_capture(x=X1,y=Y1,width=X2-X1,height=Y2-Y1):
     
@@ -133,6 +145,8 @@ def warpper():
         print('当前不是管理员权限，以管理员权限启动新进程...')
         ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, __file__, None, 1)
 
+    # main()
+    
 def main():
     # 如果鼠标在右下角，则暂停程序的功能
     # 如果鼠标在右上角，则重新启动程序的功能
